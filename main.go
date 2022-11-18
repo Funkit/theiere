@@ -38,42 +38,6 @@ func main() {
 			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
 			Component: text3,
 		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
-		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
-		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
-		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
-		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
-		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
-		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
-		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
-		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
-		},
 	}
 
 	l, err := menu.New("This is a menu", items)
@@ -81,7 +45,7 @@ func main() {
 		panic(err)
 	}
 
-	f, err := frame.New(frame.WithComponent(l), frame.WithAlignment(lipgloss.Left), frame.WithBorder())
+	f, err := frame.New(frame.WithComponent(&l), frame.WithAlignment(lipgloss.Left), frame.WithBorder())
 	if err != nil {
 		panic(err)
 	}
@@ -91,5 +55,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("Thank you for using nano-MCS !")
+	fmt.Println("Thank you for using this tool !")
 }

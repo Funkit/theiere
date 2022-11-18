@@ -51,7 +51,7 @@ func New(title string, items []ListItem, opts ...Option) (Model, error) {
 		}
 	}
 
-	width := 80
+	width := 50
 	if options.width != nil {
 		width = *options.width
 	}
@@ -80,11 +80,16 @@ func New(title string, items []ListItem, opts ...Option) (Model, error) {
 	}, nil
 }
 
-func (m Model) Init() tea.Cmd {
-	return nil
+func (m *Model) Init() tea.Cmd {
+	var commands []tea.Cmd
+	for key := range m.SubViews {
+		commands = append(commands, m.SubViews[key].Init())
+	}
+
+	return tea.Batch(commands...)
 }
 
-func (m Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 	if m.choice == "" {
 		m.list, _ = m.list.Update(msg)
 		switch msg := msg.(type) {
@@ -115,7 +120,7 @@ func (m Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 	return m, cmd
 }
 
-func (m Model) View() string {
+func (m *Model) View() string {
 	if m.choice != "" {
 		return m.SubViews[m.choice].View()
 	}
@@ -123,14 +128,14 @@ func (m Model) View() string {
 	return m.list.View()
 }
 
-func (m Model) SetWidth(width int) {
+func (m *Model) SetWidth(width int) {
 	m.list.SetWidth(width)
 	for key := range m.SubViews {
 		m.SubViews[key].SetWidth(width)
 	}
 }
 
-func (m Model) SetHeight(height int) {
+func (m *Model) SetHeight(height int) {
 	m.list.SetHeight(height)
 	for key := range m.SubViews {
 		m.SubViews[key].SetHeight(height)
