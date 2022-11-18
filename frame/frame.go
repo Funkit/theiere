@@ -11,15 +11,18 @@ type Model struct {
 	Style       lipgloss.Style
 	Content     common.SubView
 	hasContent  bool
+	fixedSize   bool
 }
 
 type options struct {
-	height      *int
-	width       *int
-	component   *common.SubView
-	border      bool
-	borderColor *lipgloss.AdaptiveColor
-	alignment   *lipgloss.Position
+	height              *int
+	width               *int
+	component           *common.SubView
+	border              bool
+	borderColor         *lipgloss.AdaptiveColor
+	horizontalAlignment *lipgloss.Position
+	verticalAlignment   *lipgloss.Position
+	fixedSize           *bool
 }
 
 type Option func(options *options) error
@@ -62,9 +65,26 @@ func WithBorderColor(color lipgloss.AdaptiveColor) Option {
 	}
 }
 
-func WithAlignment(alignment lipgloss.Position) Option {
+func WithHorizontalAlignment(alignment lipgloss.Position) Option {
 	return func(options *options) error {
-		options.alignment = &alignment
+		options.horizontalAlignment = &alignment
+
+		return nil
+	}
+}
+
+func WithVerticalAlignment(alignment lipgloss.Position) Option {
+	return func(options *options) error {
+		options.verticalAlignment = &alignment
+
+		return nil
+	}
+}
+
+func WithFixedSize() Option {
+	return func(options *options) error {
+		isFixed := true
+		options.fixedSize = &isFixed
 
 		return nil
 	}
@@ -90,15 +110,25 @@ func New(opts ...Option) (Model, error) {
 		height = *options.height
 	}
 
-	alignment := lipgloss.Center
-	if options.alignment != nil {
-		alignment = *options.alignment
+	fixedSize := false
+	if options.fixedSize != nil {
+		fixedSize = *options.fixedSize
+	}
+
+	horizontalAlignment := lipgloss.Center
+	if options.horizontalAlignment != nil {
+		horizontalAlignment = *options.horizontalAlignment
+	}
+
+	verticalAlignment := lipgloss.Center
+	if options.verticalAlignment != nil {
+		verticalAlignment = *options.verticalAlignment
 	}
 
 	style := lipgloss.NewStyle().
 		Width(width).
 		Height(height).
-		Align(alignment)
+		AlignHorizontal(horizontalAlignment).AlignVertical(verticalAlignment)
 	if options.border {
 		color := lipgloss.AdaptiveColor{Light: "#874BFD", Dark: "#7D56F4"}
 		if options.borderColor != nil {
@@ -109,7 +139,8 @@ func New(opts ...Option) (Model, error) {
 	}
 
 	m := Model{
-		Style: style,
+		Style:     style,
+		fixedSize: fixedSize,
 	}
 
 	if options.component != nil {
@@ -136,10 +167,15 @@ func (m Model) View() string {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch recv := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.Style.Width(recv.Width - 2)
-		m.Style.Height(recv.Height - 2)
-		m.Content.SetHeight(recv.Height - 2)
-		m.Content.SetWidth(recv.Width - 2)
+		if !m.fixedSize {
+			m.Style.Width(recv.Width - 2)
+			m.Style.Height(recv.Height - 2)
+			m.Content.SetHeight(recv.Height - 2)
+			m.Content.SetWidth(recv.Width - 2)
+		} else {
+			m.Content.SetHeight(m.Style.GetHeight())
+			m.Content.SetWidth(m.Style.GetWidth())
+		}
 		return m, nil
 	case tea.KeyMsg:
 		cmd := recv.String()

@@ -40,12 +40,12 @@ func main() {
 		},
 	}
 
-	l, err := menu.New("This is a menu", items)
+	l, err := menu.New("This is a menu title", items)
 	if err != nil {
 		panic(err)
 	}
 
-	f, err := frame.New(frame.WithComponent(&l), frame.WithAlignment(lipgloss.Left), frame.WithBorder())
+	f, err := frame.New(frame.WithComponent(&l), frame.WithHorizontalAlignment(lipgloss.Left), frame.WithBorder())
 	if err != nil {
 		panic(err)
 	}

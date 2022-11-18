@@ -6,7 +6,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-// Model This is a list
+// Model This is a list built for selecting various subviews.
+// Once a view is selected,the selected subview can trigger coming back
+// to the menu by returning common.TreeUp as a tea.Msg when updating.
 type Model struct {
 	list     list.Model
 	choice   string
