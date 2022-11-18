@@ -11,22 +11,81 @@ type Model struct {
 	Style   lipgloss.Style
 }
 
+type options struct {
+	height *int
+	width  *int
+	style  *lipgloss.Style
+}
+
+type Option func(options *options) error
+
+func WithWidth(width int) Option {
+	return func(options *options) error {
+		options.width = &width
+
+		return nil
+	}
+}
+
+func WithHeight(height int) Option {
+	return func(options *options) error {
+		options.width = &height
+
+		return nil
+	}
+}
+
+func WithStyle(style lipgloss.Style) Option {
+	return func(options *options) error {
+		options.style = &style
+
+		return nil
+	}
+}
+
+func New(content string, opts ...Option) (Model, error) {
+	var options options
+	for _, opt := range opts {
+		err := opt(&options)
+		if err != nil {
+			return Model{}, err
+		}
+	}
+
+	width := 30
+	if options.width != nil {
+		width = *options.width
+	}
+
+	height := 30
+	if options.height != nil {
+		height = *options.height
+	}
+
+	style := lipgloss.NewStyle().
+		Align(lipgloss.Center, lipgloss.Center).
+		Bold(true).
+		Foreground(lipgloss.Color("#FAFAFA")).
+		Background(lipgloss.Color("#7D56F4"))
+	if options.style != nil {
+		style = *options.style
+	}
+
+	style.Height(height)
+	style.Width(width)
+
+	return Model{
+		Content: content,
+		Style:   style,
+	}, nil
+}
+
 func (m Model) Init() tea.Cmd {
 	return nil
 }
 
 func (m Model) View() string {
-	//if style was not set at creation, use default value
-	if m.Style.Value() == "" {
-		defaultStyle := lipgloss.NewStyle().
-			Bold(true).
-			Padding(1).
-			Foreground(lipgloss.Color("#FAFAFA")).
-			Background(lipgloss.Color("#7D56F4"))
-		return defaultStyle.Render(m.Content)
-	} else {
-		return m.Style.Render(m.Content)
-	}
+	return m.Style.Render(m.Content)
 }
 
 func (m Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
@@ -46,5 +105,5 @@ func (m Model) SetWidth(width int) {
 }
 
 func (m Model) SetHeight(height int) {
-
+	m.Style.Height(height)
 }

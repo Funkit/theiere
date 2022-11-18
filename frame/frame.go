@@ -22,23 +22,23 @@ type options struct {
 	alignment   *lipgloss.Position
 }
 
-type Options func(options *options) error
+type Option func(options *options) error
 
-func WithWidth(width int) Options {
+func WithWidth(width int) Option {
 	return func(options *options) error {
 		options.width = &width
 
 		return nil
 	}
 }
-func WithHeight(height int) Options {
+func WithHeight(height int) Option {
 	return func(options *options) error {
 		options.height = &height
 
 		return nil
 	}
 }
-func WithComponent(content common.SubView) Options {
+func WithComponent(content common.SubView) Option {
 	return func(options *options) error {
 		options.component = &content
 
@@ -46,7 +46,7 @@ func WithComponent(content common.SubView) Options {
 	}
 }
 
-func WithBorder() Options {
+func WithBorder() Option {
 	return func(options *options) error {
 		options.border = true
 
@@ -54,7 +54,15 @@ func WithBorder() Options {
 	}
 }
 
-func WithAlignment(alignment lipgloss.Position) Options {
+func WithBorderColor(color lipgloss.AdaptiveColor) Option {
+	return func(options *options) error {
+		options.borderColor = &color
+
+		return nil
+	}
+}
+
+func WithAlignment(alignment lipgloss.Position) Option {
 	return func(options *options) error {
 		options.alignment = &alignment
 
@@ -62,7 +70,7 @@ func WithAlignment(alignment lipgloss.Position) Options {
 	}
 }
 
-func New(opts ...Options) (Model, error) {
+func New(opts ...Option) (Model, error) {
 
 	var options options
 	for _, opt := range opts {
@@ -107,8 +115,8 @@ func New(opts ...Options) (Model, error) {
 	if options.component != nil {
 		m.hasContent = true
 		m.Content = *options.component
-		m.Content.SetWidth(width)
-		m.Content.SetHeight(height)
+		m.Content.SetWidth(width - 2)
+		m.Content.SetHeight(height - 2)
 	}
 
 	return m, nil
@@ -128,10 +136,10 @@ func (m Model) View() string {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch recv := msg.(type) {
 	case tea.WindowSizeMsg:
-		m.Style.Width(recv.Width)
-		m.Style.Height(recv.Height)
-		m.Content.SetHeight(recv.Height)
-		m.Content.SetWidth(recv.Width)
+		m.Style.Width(recv.Width - 2)
+		m.Style.Height(recv.Height - 2)
+		m.Content.SetHeight(recv.Height - 2)
+		m.Content.SetWidth(recv.Width - 2)
 		return m, nil
 	case tea.KeyMsg:
 		cmd := recv.String()

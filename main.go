@@ -12,24 +12,67 @@ import (
 
 func main() {
 
+	text1, err := fancytext.New("HELLO")
+	if err != nil {
+		panic(err)
+	}
+	text2, err := fancytext.New("WORLD")
+	if err != nil {
+		panic(err)
+	}
+	text3, err := fancytext.New("HOW ARE YOU")
+	if err != nil {
+		panic(err)
+	}
+
 	items := []menu.ListItem{
 		{
-			Item: menu.NewItem("Book a Pass", "Select GS and RF channel to book"),
-			Component: fancytext.Model{
-				Content: "HELLO",
-			},
+			Item:      menu.NewItem("Book a Pass", "Select GS and RF channel to book"),
+			Component: text1,
 		},
 		{
-			Item: menu.NewItem("Manage Plans", "List plans by status"),
-			Component: fancytext.Model{
-				Content: "WORLD",
-			},
+			Item:      menu.NewItem("Manage Plans", "List plans by status"),
+			Component: text2,
 		},
 		{
-			Item: menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: fancytext.Model{
-				Content: "TOTO",
-			},
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
+		},
+		{
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
+		},
+		{
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
+		},
+		{
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
+		},
+		{
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
+		},
+		{
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
+		},
+		{
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
+		},
+		{
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
+		},
+		{
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
+		},
+		{
+			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
+			Component: text3,
 		},
 	}
 
@@ -38,7 +81,7 @@ func main() {
 		panic(err)
 	}
 
-	f, err := frame.New(frame.WithComponent(l), frame.WithAlignment(lipgloss.Left))
+	f, err := frame.New(frame.WithComponent(l), frame.WithAlignment(lipgloss.Left), frame.WithBorder())
 	if err != nil {
 		panic(err)
 	}

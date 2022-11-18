@@ -112,7 +112,6 @@ func (m Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 		return m, cmd
 	}
 
-	//m.list, cmd = m.list.Update(msg)
 	return m, cmd
 }
 
