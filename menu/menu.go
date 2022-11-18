@@ -12,7 +12,6 @@ import (
 type Model struct {
 	list     list.Model
 	choice   string
-	quitting bool
 	SubViews map[string]common.SubView
 }
 
@@ -102,8 +101,9 @@ func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 				if ok {
 					m.choice = i.Title()
 				}
-
 				return m, nil
+			case "q", "ctrl+c":
+				return m, tea.Quit
 			}
 		}
 	}

@@ -178,9 +178,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		return m, nil
 	case tea.KeyMsg:
-		cmd := recv.String()
-		switch cmd {
-		case "q", "ctrl+c":
+		switch recv.String() {
+		case "ctrl+c":
 			return m, tea.Quit
 		}
 	}
