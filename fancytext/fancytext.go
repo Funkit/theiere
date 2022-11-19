@@ -1,21 +1,22 @@
 package fancytext
 
 import (
-	"fmt"
 	"github.com/Funkit/crispy-engine/common"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
 type Model struct {
-	Content string
-	Style   lipgloss.Style
+	Content   string
+	Style     lipgloss.Style
+	fixedSize bool
 }
 
 type options struct {
-	height *int
-	width  *int
-	style  *lipgloss.Style
+	height    *int
+	width     *int
+	style     *lipgloss.Style
+	fixedSize bool
 }
 
 type Option func(options *options) error
@@ -39,6 +40,14 @@ func WithHeight(height int) Option {
 func WithStyle(style lipgloss.Style) Option {
 	return func(options *options) error {
 		options.style = &style
+
+		return nil
+	}
+}
+
+func WithFixedSize() Option {
+	return func(options *options) error {
+		options.fixedSize = true
 
 		return nil
 	}
@@ -76,8 +85,9 @@ func New(content string, opts ...Option) (Model, error) {
 	style.Width(width)
 
 	return Model{
-		Content: content,
-		Style:   style,
+		Content:   content,
+		Style:     style,
+		fixedSize: options.fixedSize,
 	}, nil
 }
 
@@ -86,8 +96,7 @@ func (m Model) Init() tea.Cmd {
 }
 
 func (m Model) View() string {
-	//return m.Style.Render(m.Content)
-	return m.Style.Render(fmt.Sprintf("Height: %v; Width: %v", m.Style.GetHeight(), m.Style.GetWidth()))
+	return m.Style.Render(m.Content)
 }
 
 func (m Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
