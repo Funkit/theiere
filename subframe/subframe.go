@@ -1,4 +1,4 @@
-package frame
+package subframe
 
 import (
 	"github.com/Funkit/crispy-engine/common"
@@ -153,26 +153,26 @@ func New(opts ...Option) (Model, error) {
 	return m, nil
 }
 
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	if m.hasContent {
 		return m.Content.Init()
 	}
 	return nil
 }
 
-func (m Model) View() string {
+func (m *Model) View() string {
 	if m.hasContent {
 		return m.Style.Render(m.Content.View())
 	}
 	return m.Style.Render("")
 }
 
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 	switch recv := msg.(type) {
 	case tea.WindowSizeMsg:
 		if !m.fixedSize {
-			m.Style.Width(recv.Width - 2)
-			m.Style.Height(recv.Height - 2)
+			m.Style.Width(recv.Width - 4)
+			m.Style.Height(recv.Height - 4)
 			if m.hasContent {
 				m.Content.SetHeight(recv.Height - 2)
 				m.Content.SetWidth(recv.Width - 2)
@@ -199,4 +199,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	return m, nil
+}
+
+func (m *Model) SetWidth(width int) {
+	m.Style.Width(width - 2)
+}
+func (m *Model) SetHeight(height int) {
+	m.Style.Height(height - 2)
 }

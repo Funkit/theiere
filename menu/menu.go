@@ -102,7 +102,7 @@ func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 					m.choice = i.Title()
 				}
 				return m, nil
-			case "q", "ctrl+c":
+			case "q", "esc", "ctrl+c":
 				return m, tea.Quit
 			}
 		}

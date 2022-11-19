@@ -5,6 +5,7 @@ import (
 	"github.com/Funkit/crispy-engine/fancytext"
 	"github.com/Funkit/crispy-engine/frame"
 	"github.com/Funkit/crispy-engine/menu"
+	"github.com/Funkit/crispy-engine/subframe"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"os"
@@ -20,7 +21,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	text3, err := fancytext.New("HOW ARE YOU")
+	text3, err := subframe.New(subframe.WithBorder())
 	if err != nil {
 		panic(err)
 	}
@@ -36,7 +37,7 @@ func main() {
 		},
 		{
 			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: text3,
+			Component: &text3,
 		},
 	}
 
