@@ -6,6 +6,7 @@ import (
 	"github.com/Funkit/crispy-engine/frame"
 	"github.com/Funkit/crispy-engine/menu"
 	"github.com/Funkit/crispy-engine/subframe"
+	"github.com/Funkit/crispy-engine/tabs"
 	"github.com/Funkit/crispy-engine/validation"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -13,38 +14,10 @@ import (
 )
 
 func main() {
-
-	text1, err := fancytext.New("HELLO")
-	if err != nil {
-		panic(err)
-	}
-	text2, err := fancytext.New("WORLD")
-	if err != nil {
-		panic(err)
-	}
-
-	vld, err := validation.New()
-
-	text3, err := subframe.New(subframe.WithComponent(&vld),
-		subframe.WithHorizontalAlignment(lipgloss.Center),
-		subframe.WithVerticalAlignment(lipgloss.Center))
-	if err != nil {
-		panic(err)
-	}
-
 	items := []menu.ListItem{
-		{
-			Item:      menu.NewItem("Book a Pass", "Select GS and RF channel to book"),
-			Component: text1,
-		},
-		{
-			Item:      menu.NewItem("Manage Plans", "List plans by status"),
-			Component: text2,
-		},
-		{
-			Item:      menu.NewItem("Cancel Plan", "Cancel an upcoming plan"),
-			Component: &text3,
-		},
+		generateItem1(),
+		generateItem2(),
+		generateItem3(),
 	}
 
 	l, err := menu.New("This is a menu title", items)
@@ -63,4 +36,67 @@ func main() {
 	}
 
 	fmt.Println("Thank you for using this tool !")
+}
+
+func generateItem1() menu.ListItem {
+	item1, err := fancytext.New("HELLO")
+	if err != nil {
+		panic(err)
+	}
+
+	return menu.ListItem{
+		Item:      menu.NewItem("fancytext", "Full size text, default values"),
+		Component: item1,
+	}
+}
+
+func generateItem2() menu.ListItem {
+	vld, err := validation.New()
+
+	item2, err := subframe.New(subframe.WithComponent(&vld),
+		subframe.WithHorizontalAlignment(lipgloss.Center),
+		subframe.WithVerticalAlignment(lipgloss.Center))
+	if err != nil {
+		panic(err)
+	}
+
+	return menu.ListItem{
+		Item:      menu.NewItem("validation", "Full size yes/no validation screen, default values"),
+		Component: &item2,
+	}
+}
+
+func generateItem3() menu.ListItem {
+	tab1, err := tabs.NewTab("Tab 1")
+	if err != nil {
+		panic(err)
+	}
+	tab2, err := tabs.NewTab("Tab 2")
+	if err != nil {
+		panic(err)
+	}
+	tab3, err := tabs.NewTab("Tab 3")
+	if err != nil {
+		panic(err)
+	}
+
+	contentTabs := []tabs.Tab{
+		tab1,
+		tab2,
+		tab3,
+	}
+
+	subTabs, err := tabs.New(contentTabs)
+	if err != nil {
+		panic(err)
+	}
+
+	subf, err := subframe.New(subframe.WithComponent(subTabs),
+		subframe.WithHorizontalAlignment(lipgloss.Left),
+		subframe.WithVerticalAlignment(lipgloss.Top))
+
+	return menu.ListItem{
+		Item:      menu.NewItem("tabs", "tabulations with content in each tab"),
+		Component: &subf,
+	}
 }
