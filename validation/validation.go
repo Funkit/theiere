@@ -1,7 +1,7 @@
 package validation
 
 import (
-	"github.com/Funkit/crispy-engine/common"
+	"github.com/Funkit/crispy-engine/subview"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -89,7 +89,7 @@ func New(opts ...Option) (Model, error) {
 
 func (m *Model) Init() tea.Cmd { return nil }
 
-func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (subview.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -98,7 +98,7 @@ func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 		case "enter":
 			return m, ReturnStatus(m.buttonPos)
 		case "q", "esc":
-			return m, common.GoUp
+			return m, subview.GoUp
 		}
 	}
 	return m, nil
@@ -138,7 +138,7 @@ func ReturnStatus(proceed bool) tea.Cmd {
 		}
 	}
 
-	return common.GoUp
+	return subview.GoUp
 }
 
 func (m *Model) SetWidth(width int) {

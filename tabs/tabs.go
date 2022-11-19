@@ -1,8 +1,8 @@
 package tabs
 
 import (
-	"github.com/Funkit/crispy-engine/common"
 	"github.com/Funkit/crispy-engine/fancytext"
+	"github.com/Funkit/crispy-engine/subview"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
@@ -40,7 +40,7 @@ var (
 
 type Model struct {
 	Tabs             []string
-	TabContents      []common.SubView
+	TabContents      []subview.Model
 	ActiveTab        int
 	inactiveTabStyle lipgloss.Style
 	activeTabStyle   lipgloss.Style
@@ -52,10 +52,10 @@ type Model struct {
 // Tab each tab is defined by its title and its content
 type Tab struct {
 	Name    string
-	Content common.SubView
+	Content subview.Model
 }
 
-func NewTab(name string, content ...common.SubView) (Tab, error) {
+func NewTab(name string, content ...subview.Model) (Tab, error) {
 	if len(content) != 0 {
 		return Tab{
 			Name:    name,
@@ -98,7 +98,7 @@ func WithColor(color lipgloss.AdaptiveColor) Option {
 	}
 }
 
-// New builds a new tab model. Will panic if tab.content is not set to an actual common.SubView.
+// New builds a new tab model. Will panic if tab.content is not set to an actual common.Model.
 func New(availableTabs []Tab, opts ...Option) (*Model, error) {
 	var options options
 	for _, opt := range opts {
@@ -119,7 +119,7 @@ func New(availableTabs []Tab, opts ...Option) (*Model, error) {
 	}
 
 	var tabNames []string
-	var tabElements []common.SubView
+	var tabElements []subview.Model
 	for _, val := range availableTabs {
 		tabNames = append(tabNames, val.Name)
 		tabElements = append(tabElements, val.Content)
@@ -143,7 +143,7 @@ func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
-func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (subview.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch {
@@ -154,7 +154,7 @@ func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 			m.ActiveTab = min(m.ActiveTab+1, len(m.Tabs)-1)
 			return m, nil
 		case key.Matches(msg, m.KeyMap.Quit):
-			return m, common.GoUp
+			return m, subview.GoUp
 		}
 		m.TabContents[m.ActiveTab], _ = m.TabContents[m.ActiveTab].Update(msg)
 	}

@@ -1,7 +1,7 @@
 package frame
 
 import (
-	"github.com/Funkit/crispy-engine/common"
+	"github.com/Funkit/crispy-engine/subview"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -9,7 +9,7 @@ import (
 type Model struct {
 	borderColor lipgloss.AdaptiveColor
 	Style       lipgloss.Style
-	Content     common.SubView
+	Content     subview.Model
 	hasContent  bool
 	fixedSize   bool
 }
@@ -17,7 +17,7 @@ type Model struct {
 type options struct {
 	height              *int
 	width               *int
-	component           *common.SubView
+	component           *subview.Model
 	border              bool
 	borderColor         *lipgloss.AdaptiveColor
 	horizontalAlignment *lipgloss.Position
@@ -41,7 +41,7 @@ func WithHeight(height int) Option {
 		return nil
 	}
 }
-func WithComponent(content common.SubView) Option {
+func WithComponent(content subview.Model) Option {
 	return func(options *options) error {
 		options.component = &content
 

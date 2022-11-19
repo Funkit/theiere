@@ -1,7 +1,7 @@
 package fancytext
 
 import (
-	"github.com/Funkit/crispy-engine/common"
+	"github.com/Funkit/crispy-engine/subview"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -99,12 +99,12 @@ func (m *Model) View() string {
 	return m.Style.Render(m.Content)
 }
 
-func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (subview.Model, tea.Cmd) {
 	switch val := msg.(type) {
 	case tea.KeyMsg:
 		switch val.String() {
 		case "esc", "q":
-			return m, common.GoUp
+			return m, subview.GoUp
 		}
 	}
 

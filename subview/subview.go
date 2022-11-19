@@ -1,13 +1,13 @@
-package common
+package subview
 
 import tea "github.com/charmbracelet/bubbletea"
 
-type SubView interface {
+type Model interface {
 	SetWidth(width int)
 	SetHeight(height int)
 	View() string
 	Init() tea.Cmd
-	Update(msg tea.Msg) (SubView, tea.Cmd)
+	Update(msg tea.Msg) (Model, tea.Cmd)
 }
 
 type TreeUp struct {

@@ -1,7 +1,7 @@
 package menu
 
 import (
-	"github.com/Funkit/crispy-engine/common"
+	"github.com/Funkit/crispy-engine/subview"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -12,13 +12,13 @@ import (
 type Model struct {
 	list      list.Model
 	choice    string
-	SubViews  map[string]common.SubView
+	SubViews  map[string]subview.Model
 	fixedSize bool
 }
 
 type ListItem struct {
 	Item      Item
-	Component common.SubView
+	Component subview.Model
 }
 
 type options struct {
@@ -72,7 +72,7 @@ func New(title string, items []ListItem, opts ...Option) (Model, error) {
 		height = *options.height
 	}
 
-	subViews := make(map[string]common.SubView)
+	subViews := make(map[string]subview.Model)
 
 	var teaList []list.Item
 	for _, item := range items {
@@ -101,7 +101,7 @@ func (m *Model) Init() tea.Cmd {
 	return tea.Batch(commands...)
 }
 
-func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (subview.Model, tea.Cmd) {
 	if m.choice == "" {
 		m.list, _ = m.list.Update(msg)
 		switch msg := msg.(type) {
@@ -123,7 +123,7 @@ func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 	if m.choice != "" {
 		m.SubViews[m.choice], cmd = m.SubViews[m.choice].Update(msg)
 		switch msg.(type) {
-		case common.TreeUp:
+		case subview.TreeUp:
 			m.choice = ""
 			return m, nil
 		}
