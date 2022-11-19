@@ -1,6 +1,7 @@
 package fancytext
 
 import (
+	"fmt"
 	"github.com/Funkit/crispy-engine/common"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -85,7 +86,8 @@ func (m Model) Init() tea.Cmd {
 }
 
 func (m Model) View() string {
-	return m.Style.Render(m.Content)
+	//return m.Style.Render(m.Content)
+	return m.Style.Render(fmt.Sprintf("Height: %v; Width: %v", m.Style.GetHeight(), m.Style.GetWidth()))
 }
 
 func (m Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {

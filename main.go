@@ -6,6 +6,7 @@ import (
 	"github.com/Funkit/crispy-engine/frame"
 	"github.com/Funkit/crispy-engine/menu"
 	"github.com/Funkit/crispy-engine/subframe"
+	"github.com/Funkit/crispy-engine/validation"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"os"
@@ -21,7 +22,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	text3, err := subframe.New(subframe.WithBorder())
+
+	vld, err := validation.New()
+
+	text3, err := subframe.New(subframe.WithComponent(&vld),
+		subframe.WithHorizontalAlignment(lipgloss.Center),
+		subframe.WithVerticalAlignment(lipgloss.Center))
 	if err != nil {
 		panic(err)
 	}
