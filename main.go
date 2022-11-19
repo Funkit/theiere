@@ -46,7 +46,7 @@ func generateItem1() menu.ListItem {
 
 	return menu.ListItem{
 		Item:      menu.NewItem("fancytext", "Full size text, default values"),
-		Component: item1,
+		Component: &item1,
 	}
 }
 

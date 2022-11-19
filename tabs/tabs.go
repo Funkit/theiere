@@ -35,24 +35,18 @@ var (
 		BottomLeft:  "┴",
 		BottomRight: "┴",
 	}
-
-	//helpFormatting
 	helpStyle = list.DefaultStyles().HelpStyle
 )
 
 type Model struct {
-	//Tabs name of each tab
-	Tabs []string
-	//TabContents components inside each tab
-	TabContents []common.SubView
-	//ActiveTab index of the active tab
+	Tabs             []string
+	TabContents      []common.SubView
 	ActiveTab        int
 	inactiveTabStyle lipgloss.Style
 	activeTabStyle   lipgloss.Style
-	//KeyMap Key mappings for navigating the list.
-	KeyMap   KeyMap
-	Help     help.Model
-	maxWidth int
+	KeyMap           KeyMap
+	Help             help.Model
+	maxWidth         int
 }
 
 // Tab each tab is defined by its title and its content
@@ -76,7 +70,7 @@ func NewTab(name string, content ...common.SubView) (Tab, error) {
 
 	return Tab{
 		Name:    name,
-		Content: cnt,
+		Content: &cnt,
 	}, nil
 }
 
@@ -104,7 +98,7 @@ func WithColor(color lipgloss.AdaptiveColor) Option {
 	}
 }
 
-// New builds a new tab model. Will panic if tab.content is not set to an actual common.SubView
+// New builds a new tab model. Will panic if tab.content is not set to an actual common.SubView.
 func New(availableTabs []Tab, opts ...Option) (*Model, error) {
 	var options options
 	for _, opt := range opts {
@@ -131,7 +125,7 @@ func New(availableTabs []Tab, opts ...Option) (*Model, error) {
 		tabElements = append(tabElements, val.Content)
 	}
 
-	inactiveTabStyle := lipgloss.NewStyle().Border(inactiveTabBorder, true).BorderForeground(color).Padding(0, 1)
+	inactiveTabStyle := lipgloss.NewStyle().Border(inactiveTabBorder, true).BorderForeground(color)
 
 	return &Model{
 		Tabs:             tabNames,
@@ -170,16 +164,6 @@ func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 	return m, cmd
 }
 
-// tabPadding widens the bottom line on the tab header to match the "page" width
-func (m *Model) tabPadding(tabsWidth, maxSize int) string {
-	tabGap := m.inactiveTabStyle.Copy().
-		BorderTop(false).
-		BorderLeft(false).
-		BorderRight(false)
-
-	return tabGap.Render(strings.Repeat(" ", maxSize))
-}
-
 func (m *Model) View() string {
 	var renderedTabs []string
 
@@ -197,20 +181,31 @@ func (m *Model) View() string {
 	}
 
 	row := lipgloss.JoinHorizontal(lipgloss.Top, renderedTabs...)
-	//row = lipgloss.JoinHorizontal(lipgloss.Bottom, row, m.tabPadding(lipgloss.Width(row), m.maxWidth))
 
-	//doc.WriteString("\n")
-	//doc.WriteString(m.TabContents[m.ActiveTab].View())
+	tabGap := m.inactiveTabStyle.Copy().
+		BorderTop(false).
+		BorderLeft(false).
+		BorderRight(false)
+
+	tabGapStr := strings.Repeat(" ", max(0, m.maxWidth-lipgloss.Width(row)))
+
+	row = lipgloss.JoinHorizontal(lipgloss.Bottom, row, tabGap.Render(tabGapStr))
+
+	row = lipgloss.JoinVertical(lipgloss.Center, row, m.TabContents[m.ActiveTab].View())
 	return lipgloss.JoinVertical(lipgloss.Left, row, helpStyle.Render(m.Help.View(m.KeyMap)))
 }
 
 func (m *Model) SetWidth(width int) {
 	m.maxWidth = width
 	for i := range m.TabContents {
-		m.TabContents[i].SetWidth(width)
+		m.TabContents[i].SetWidth(width - 2)
 	}
 }
-func (m *Model) SetHeight(height int) {}
+func (m *Model) SetHeight(height int) {
+	for i := range m.TabContents {
+		m.TabContents[i].SetHeight(height - 2)
+	}
+}
 
 func max(a, b int) int {
 	if a > b {

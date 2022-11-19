@@ -91,15 +91,15 @@ func New(content string, opts ...Option) (Model, error) {
 	}, nil
 }
 
-func (m Model) Init() tea.Cmd {
+func (m *Model) Init() tea.Cmd {
 	return nil
 }
 
-func (m Model) View() string {
+func (m *Model) View() string {
 	return m.Style.Render(m.Content)
 }
 
-func (m Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
+func (m *Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 	switch val := msg.(type) {
 	case tea.KeyMsg:
 		switch val.String() {
@@ -111,14 +111,14 @@ func (m Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 	return m, nil
 }
 
-func (m Model) SetWidth(width int) {
+func (m *Model) SetWidth(width int) {
 	if !m.fixedSize {
 		m.Style.Width(width)
 	}
 
 }
 
-func (m Model) SetHeight(height int) {
+func (m *Model) SetHeight(height int) {
 	if !m.fixedSize {
 		m.Style.Height(height)
 	}
