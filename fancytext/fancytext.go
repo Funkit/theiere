@@ -123,3 +123,5 @@ func (m *Model) SetHeight(height int) {
 		m.Style.Height(height)
 	}
 }
+
+func (m *Model) Reset() {}

@@ -201,9 +201,17 @@ func (m *Model) SetWidth(width int) {
 		m.TabContents[i].SetWidth(width - 2)
 	}
 }
+
 func (m *Model) SetHeight(height int) {
 	for i := range m.TabContents {
 		m.TabContents[i].SetHeight(height - 2)
+	}
+}
+
+func (m *Model) Reset() {
+	m.ActiveTab = 0
+	for i := 0; i < len(m.TabContents); i++ {
+		m.TabContents[i].Reset()
 	}
 }
 

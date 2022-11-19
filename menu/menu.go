@@ -125,6 +125,9 @@ func (m *Model) Update(msg tea.Msg) (subview.Model, tea.Cmd) {
 		switch msg.(type) {
 		case subview.TreeUp:
 			m.choice = ""
+			for key := range m.SubViews {
+				m.SubViews[key].Reset()
+			}
 			return m, nil
 		}
 		return m, cmd
@@ -156,5 +159,12 @@ func (m *Model) SetHeight(height int) {
 		for key := range m.SubViews {
 			m.SubViews[key].SetHeight(height)
 		}
+	}
+}
+
+func (m *Model) Reset() {
+	m.choice = ""
+	for key := range m.SubViews {
+		m.SubViews[key].Reset()
 	}
 }

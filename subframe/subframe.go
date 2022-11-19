@@ -213,3 +213,9 @@ func (m *Model) SetHeight(height int) {
 		m.Content.SetHeight(height - 2)
 	}
 }
+
+func (m *Model) Reset() {
+	if m.hasContent {
+		m.Content.Reset()
+	}
+}

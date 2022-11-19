@@ -8,6 +8,7 @@ type Model interface {
 	View() string
 	Init() tea.Cmd
 	Update(msg tea.Msg) (Model, tea.Cmd)
+	Reset() // Reset the view when going up in the component tree
 }
 
 type TreeUp struct {

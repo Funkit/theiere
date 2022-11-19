@@ -144,6 +144,11 @@ func ReturnStatus(proceed bool) tea.Cmd {
 func (m *Model) SetWidth(width int) {
 	m.width = width
 }
+
 func (m *Model) SetHeight(height int) {
 	m.height = height
+}
+
+func (m *Model) Reset() {
+	m.buttonPos = false
 }
