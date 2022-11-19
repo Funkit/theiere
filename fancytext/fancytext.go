@@ -112,9 +112,14 @@ func (m Model) Update(msg tea.Msg) (common.SubView, tea.Cmd) {
 }
 
 func (m Model) SetWidth(width int) {
-	m.Style.Width(width)
+	if !m.fixedSize {
+		m.Style.Width(width)
+	}
+
 }
 
 func (m Model) SetHeight(height int) {
-	m.Style.Height(height)
+	if !m.fixedSize {
+		m.Style.Height(height)
+	}
 }

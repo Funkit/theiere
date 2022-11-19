@@ -10,9 +10,10 @@ import (
 // Once a view is selected,the selected subview can trigger coming back
 // to the menu by returning common.TreeUp as a tea.Msg when updating.
 type Model struct {
-	list     list.Model
-	choice   string
-	SubViews map[string]common.SubView
+	list      list.Model
+	choice    string
+	SubViews  map[string]common.SubView
+	fixedSize bool
 }
 
 type ListItem struct {
@@ -21,8 +22,9 @@ type ListItem struct {
 }
 
 type options struct {
-	width  *int
-	height *int
+	width     *int
+	height    *int
+	fixedSize bool
 }
 
 type Option func(options *options) error
@@ -38,6 +40,14 @@ func WithWidth(width int) Option {
 func WithHeight(height int) Option {
 	return func(options *options) error {
 		options.height = &height
+
+		return nil
+	}
+}
+
+func WithFixedSize() Option {
+	return func(options *options) error {
+		options.fixedSize = true
 
 		return nil
 	}
@@ -76,8 +86,9 @@ func New(title string, items []ListItem, opts ...Option) (Model, error) {
 	l.SetFilteringEnabled(false)
 
 	return Model{
-		list:     l,
-		SubViews: subViews,
+		list:      l,
+		SubViews:  subViews,
+		fixedSize: options.fixedSize,
 	}, nil
 }
 
@@ -131,15 +142,19 @@ func (m *Model) View() string {
 }
 
 func (m *Model) SetWidth(width int) {
-	m.list.SetWidth(width)
-	for key := range m.SubViews {
-		m.SubViews[key].SetWidth(width)
+	if !m.fixedSize {
+		m.list.SetWidth(width)
+		for key := range m.SubViews {
+			m.SubViews[key].SetWidth(width)
+		}
 	}
 }
 
 func (m *Model) SetHeight(height int) {
-	m.list.SetHeight(height)
-	for key := range m.SubViews {
-		m.SubViews[key].SetHeight(height)
+	if !m.fixedSize {
+		m.list.SetHeight(height)
+		for key := range m.SubViews {
+			m.SubViews[key].SetHeight(height)
+		}
 	}
 }
