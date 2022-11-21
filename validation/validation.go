@@ -96,7 +96,10 @@ func (m *Model) Update(msg tea.Msg) (subview.Model, tea.Cmd) {
 		case "left", "right":
 			m.buttonPos = !m.buttonPos
 		case "enter":
-			return m, ReturnStatus(m.buttonPos)
+			if !m.buttonPos {
+				return m, subview.GoUp
+			}
+			return m, Proceed()
 		case "q", "esc":
 			return m, subview.GoUp
 		}
@@ -131,14 +134,10 @@ type Status struct {
 	Validated bool
 }
 
-func ReturnStatus(proceed bool) tea.Cmd {
-	if proceed {
-		return func() tea.Msg {
-			return Status{Validated: proceed}
-		}
+func Proceed() tea.Cmd {
+	return func() tea.Msg {
+		return Status{Validated: true}
 	}
-
-	return subview.GoUp
 }
 
 func (m *Model) SetWidth(width int) {

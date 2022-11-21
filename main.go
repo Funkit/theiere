@@ -30,7 +30,9 @@ func main() {
 		panic(err)
 	}
 
-	if _, err := tea.NewProgram(f, tea.WithAltScreen()).Run(); err != nil {
+	p := tea.NewProgram(f, tea.WithAltScreen())
+
+	if _, err := p.Run(); err != nil {
 		fmt.Println("Error running program:", err)
 		os.Exit(1)
 	}

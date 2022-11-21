@@ -174,8 +174,8 @@ func (m *Model) Update(msg tea.Msg) (subview.Model, tea.Cmd) {
 			m.Style.Width(recv.Width - 4)
 			m.Style.Height(recv.Height - 4)
 			if m.hasContent {
-				m.Content.SetHeight(recv.Height - 2)
-				m.Content.SetWidth(recv.Width - 2)
+				m.Content.SetHeight(recv.Height - 4)
+				m.Content.SetWidth(recv.Width - 4)
 			}
 		} else {
 			if m.hasContent {
