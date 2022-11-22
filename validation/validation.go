@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"github.com/Funkit/crispy-engine/executor"
 	"github.com/Funkit/crispy-engine/subview"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -35,6 +36,8 @@ type Model struct {
 	buttonPos     bool
 	width, height int
 	frameStyle    lipgloss.Style
+	exec          executor.Model
+	execEnabled   bool
 	//this channel must be initialized outside this model
 	clientCom chan<- struct{}
 }
@@ -90,9 +93,15 @@ func New(opts ...Option) (Model, error) {
 		height = *options.height
 	}
 
+	exec, err := executor.New()
+	if err != nil {
+		return Model{}, err
+	}
+
 	return Model{
 		width:     width,
 		height:    height,
+		exec:      exec,
 		clientCom: options.clientCom,
 		frameStyle: lipgloss.NewStyle().
 			AlignHorizontal(lipgloss.Center).AlignVertical(lipgloss.Center),
@@ -108,6 +117,15 @@ func (m *Model) Update(msg tea.Msg) (subview.Model, tea.Cmd) {
 		case "left", "right":
 			m.buttonPos = !m.buttonPos
 		case "enter":
+			if m.execEnabled {
+
+				recv, cmd := m.exec.Update(msg)
+				if ex, ok := recv.(*executor.Model); ok {
+					m.exec = *ex
+				}
+
+				return m, cmd
+			}
 			if !m.buttonPos {
 				return m, subview.GoUp
 			}
@@ -165,4 +183,6 @@ func (m *Model) SetHeight(height int) {
 
 func (m *Model) Reset() {
 	m.buttonPos = false
+	m.execEnabled = false
+	m.exec.Reset()
 }
