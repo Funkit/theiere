@@ -35,11 +35,14 @@ type Model struct {
 	buttonPos     bool
 	width, height int
 	frameStyle    lipgloss.Style
+	//this channel must be initialized outside this model
+	clientCom chan<- struct{}
 }
 
 type options struct {
-	width  *int
-	height *int
+	width     *int
+	height    *int
+	clientCom chan<- struct{}
 }
 
 type Option func(options *options) error
@@ -55,6 +58,14 @@ func WithWidth(width int) Option {
 func WithHeight(height int) Option {
 	return func(options *options) error {
 		options.height = &height
+
+		return nil
+	}
+}
+
+func WithChannel(signalChan chan<- struct{}) Option {
+	return func(options *options) error {
+		options.clientCom = signalChan
 
 		return nil
 	}
@@ -80,8 +91,9 @@ func New(opts ...Option) (Model, error) {
 	}
 
 	return Model{
-		width:  width,
-		height: height,
+		width:     width,
+		height:    height,
+		clientCom: options.clientCom,
 		frameStyle: lipgloss.NewStyle().
 			AlignHorizontal(lipgloss.Center).AlignVertical(lipgloss.Center),
 	}, nil
@@ -98,6 +110,9 @@ func (m *Model) Update(msg tea.Msg) (subview.Model, tea.Cmd) {
 		case "enter":
 			if !m.buttonPos {
 				return m, subview.GoUp
+			}
+			if m.clientCom != nil {
+				m.clientCom <- struct{}{}
 			}
 			return m, Proceed()
 		case "q", "esc":

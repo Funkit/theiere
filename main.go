@@ -14,9 +14,10 @@ import (
 )
 
 func main() {
+	comm := make(chan struct{})
 	items := []menu.ListItem{
 		generateItem1(),
-		generateItem2(),
+		generateItem2(comm),
 		generateItem3(),
 	}
 
@@ -31,6 +32,13 @@ func main() {
 	}
 
 	p := tea.NewProgram(f, tea.WithAltScreen())
+
+	go func(ch <-chan struct{}) {
+		select {
+		case <-comm:
+			p.Send(tea.Quit())
+		}
+	}(comm)
 
 	if _, err := p.Run(); err != nil {
 		fmt.Println("Error running program:", err)
@@ -52,8 +60,8 @@ func generateItem1() menu.ListItem {
 	}
 }
 
-func generateItem2() menu.ListItem {
-	vld, err := validation.New()
+func generateItem2(comm chan struct{}) menu.ListItem {
+	vld, err := validation.New(validation.WithChannel(comm))
 
 	item2, err := subframe.New(subframe.WithComponent(&vld),
 		subframe.WithHorizontalAlignment(lipgloss.Center),
