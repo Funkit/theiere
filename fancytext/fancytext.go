@@ -18,6 +18,7 @@ type options struct {
 	width     *int
 	style     *lipgloss.Style
 	fixedSize bool
+	content   string
 }
 
 type Option func(options *options) error
@@ -54,7 +55,15 @@ func WithFixedSize() Option {
 	}
 }
 
-func New(content string, opts ...Option) (Model, error) {
+func WithContent(content string) Option {
+	return func(options *options) error {
+		options.content = content
+
+		return nil
+	}
+}
+
+func New(opts ...Option) (Model, error) {
 	var options options
 	for _, opt := range opts {
 		err := opt(&options)
@@ -86,7 +95,7 @@ func New(content string, opts ...Option) (Model, error) {
 	style.Width(width)
 
 	return Model{
-		Content:   content,
+		Content:   options.content,
 		Style:     style,
 		fixedSize: options.fixedSize,
 	}, nil
@@ -97,7 +106,9 @@ func (m *Model) Init() tea.Cmd {
 }
 
 func (m *Model) View() string {
-	//return m.Style.Render(m.Content)
+	if m.Content != "" {
+		return m.Style.Render(m.Content)
+	}
 	return m.Style.Render(fmt.Sprintf("Width: %v, Height: %v", m.Style.GetWidth(), m.Style.GetHeight()))
 }
 

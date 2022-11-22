@@ -63,7 +63,7 @@ func NewTab(name string, content ...subview.Model) (Tab, error) {
 		}, nil
 	}
 
-	cnt, err := fancytext.New("Hello World")
+	cnt, err := fancytext.New()
 	if err != nil {
 		return Tab{}, err
 	}

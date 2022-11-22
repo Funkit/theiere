@@ -49,7 +49,7 @@ func main() {
 }
 
 func generateItem1() menu.ListItem {
-	item1, err := fancytext.New("HELLO")
+	item1, err := fancytext.New(fancytext.WithContent("HELLO"))
 	if err != nil {
 		panic(err)
 	}
