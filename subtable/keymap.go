@@ -1,4 +1,4 @@
-package table
+package subtable
 
 import (
 	"github.com/charmbracelet/bubbles/key"
