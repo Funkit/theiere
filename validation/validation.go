@@ -1,8 +1,8 @@
 package validation
 
 import (
-	"github.com/Funkit/crispy-engine/executor"
-	"github.com/Funkit/crispy-engine/subview"
+	"github.com/Funkit/theiere/executor"
+	"github.com/Funkit/theiere/subview"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )

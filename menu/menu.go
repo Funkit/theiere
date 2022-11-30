@@ -1,7 +1,7 @@
 package menu
 
 import (
-	"github.com/Funkit/crispy-engine/subview"
+	"github.com/Funkit/theiere/subview"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 )

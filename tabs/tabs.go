@@ -1,8 +1,8 @@
 package tabs
 
 import (
-	"github.com/Funkit/crispy-engine/fancytext"
-	"github.com/Funkit/crispy-engine/subview"
+	"github.com/Funkit/theiere/fancytext"
+	"github.com/Funkit/theiere/subview"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"

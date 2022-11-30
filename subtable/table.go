@@ -2,7 +2,7 @@ package subtable
 
 import (
 	"errors"
-	"github.com/Funkit/crispy-engine/subview"
+	"github.com/Funkit/theiere/subview"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/table"

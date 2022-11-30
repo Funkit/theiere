@@ -1,7 +1,7 @@
 package subframe
 
 import (
-	"github.com/Funkit/crispy-engine/subview"
+	"github.com/Funkit/theiere/subview"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )

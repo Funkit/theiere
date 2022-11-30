@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/Funkit/crispy-engine/fancytext"
-	"github.com/Funkit/crispy-engine/frame"
-	"github.com/Funkit/crispy-engine/menu"
-	"github.com/Funkit/crispy-engine/subframe"
-	"github.com/Funkit/crispy-engine/tabs"
-	"github.com/Funkit/crispy-engine/validation"
+	"github.com/Funkit/theiere/fancytext"
+	"github.com/Funkit/theiere/frame"
+	"github.com/Funkit/theiere/menu"
+	"github.com/Funkit/theiere/subframe"
+	"github.com/Funkit/theiere/tabs"
+	"github.com/Funkit/theiere/validation"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"os"

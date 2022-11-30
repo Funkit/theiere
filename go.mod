@@ -1,4 +1,4 @@
-module github.com/Funkit/crispy-engine
+module github.com/Funkit/theiere
 
 go 1.19
 

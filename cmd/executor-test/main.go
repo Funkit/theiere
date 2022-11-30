@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/Funkit/crispy-engine/executor"
-	"github.com/Funkit/crispy-engine/frame"
+	"github.com/Funkit/theiere/executor"
+	"github.com/Funkit/theiere/frame"
 	tea "github.com/charmbracelet/bubbletea"
 	"log"
 	"os"

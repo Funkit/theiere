@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/Funkit/crispy-engine/frame"
-	"github.com/Funkit/crispy-engine/subtable"
+	"github.com/Funkit/theiere/frame"
+	"github.com/Funkit/theiere/subtable"
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"log"
